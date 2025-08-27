@@ -1,0 +1,24 @@
+# Azure Functions / Java
+local.settings.json
+**/local.settings.json
+*.env
+.env
+secrets/
+*.pfx
+*.jks
+*.keystore
+*.cer
+*.pem
+*.key
+
+# Java/Gradle noise
+.gradle/
+build/
+target/
+out/
+*.class
+
+# IDEs
+.vscode/
+.idea/
+*.iml

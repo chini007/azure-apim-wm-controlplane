@@ -3,13 +3,13 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "java",
-    "ACP_BASE_URL": "https://psprod.apicp-az-eu.webmethods.io/",
+    "ACP_BASE_URL": "https://<your-control-plane-host>",
     "ACP_ORG_ID": "<org-id>",
     "ACP_ENV_ID": "<env-or-catalog-id>",
     "ACP_RUNTIME_TYPE": "azure-apim",
     "ACP_CLIENT_ID": "<client-id>",
     "ACP_CLIENT_SECRET": "<secret>",
-    "AZURE_SUBSCRIPTION_ID": "5e72aef8-52be-4994-8cee-3eb90e246bdb",
+    "AZURE_SUBSCRIPTION_ID": "<sub-id>",
     "AZURE_RESOURCE_GROUP": "rg-apim-srini",
     "AZURE_APIM_NAME": "apim-srini-consumption"
   }
