@@ -1,0 +1,37 @@
+name: Deploy Infra
+on:
+  workflow_dispatch:
+  push:
+    paths: ["infra/**", ".github/workflows/deploy-infra.yml"]
+    branches: ["main"]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy bootstrap
+        env:
+          LOCATION: westeurope
+          RG: rg-apim-srini
+          APIM_NAME: apim-srini-consumption
+          FUNC_APP: fa-azure-agent-srini
+          ACP_BASE_URL: ${{ secrets.ACP_BASE_URL }}
+          ACP_ORG_ID: ${{ secrets.ACP_ORG_ID }}
+          ACP_ENV_ID: ${{ secrets.ACP_ENV_ID }}
+          ACP_CLIENT_ID: ${{ secrets.ACP_CLIENT_ID }}
+          ACP_CLIENT_SECRET: ${{ secrets.ACP_CLIENT_SECRET }}
+        run: bash infra/bootstrap.sh

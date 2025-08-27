@@ -1,0 +1,44 @@
+name: Deploy Agent (Functions)
+on:
+  workflow_dispatch:
+  push:
+    paths: ["external/agent/functions/**", ".github/workflows/deploy-agent.yml"]
+    branches: ["main"]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  RG: rg-apim-srini
+  FUNC_APP: fa-azure-agent-srini
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build (Gradle)
+        working-directory: external/agent/functions
+        run: ./gradlew clean build
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Publish to Function App
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.FUNC_APP }}
+          package: external/agent/functions/build/azure-functions/*
